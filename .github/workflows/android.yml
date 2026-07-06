@@ -42,7 +42,7 @@ jobs:
           sed -i 's/^package.name = .*/package.name = hgos2/' buildozer.spec
           sed -i 's/^package.domain = .*/package.domain = org.doubleduo/' buildozer.spec
           sed -i 's/^source.include_exts = .*/source.include_exts = py,png,jpg,jpeg,webp,json,mp3,wav,ogg,ttf,otf/' buildozer.spec
-          sed -i 's/^requirements = .*/requirements = python3==3.11.9,pygame==2.5.2/' buildozer.spec
+          sed -i 's/^requirements = .*/requirements = hostpython3==3.11.9,python3==3.11.9,pygame==2.5.2/' buildozer.spec
           sed -i 's/^# android.api = .*/android.api = 33/' buildozer.spec
           sed -i 's/^android.api = .*/android.api = 33/' buildozer.spec
           sed -i 's/^# android.minapi = .*/android.minapi = 24/' buildozer.spec
