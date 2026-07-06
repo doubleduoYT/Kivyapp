@@ -1,1 +1,49 @@
-404: Not Found
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install system packages
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip git zip unzip openjdk-17-jdk autoconf automake libtool pkg-config zlib1g-dev libffi-dev libssl-dev
+
+      - name: Install Buildozer
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install cython==0.29.37 buildozer
+
+      - name: Fix buildozer.spec
+        run: |
+          if [ ! -f buildozer.spec ]; then buildozer init; fi
+          sed -i 's/^title = .*/title = HG OS 2/' buildozer.spec
+          sed -i 's/^package.name = .*/package.name = hgos2/' buildozer.spec
+          sed -i 's/^package.domain = .*/package.domain = org.doubleduo/' buildozer.spec
+          sed -i 's/^source.include_exts = .*/source.include_exts = py,png,jpg,jpeg,webp,json,mp3,wav,ogg,ttf,otf/' buildozer.spec
+          sed -i 's/^requirements = .*/requirements = python3,pygame/' buildozer.spec
+          sed -i 's/^# android.api = .*/android.api = 35/' buildozer.spec
+          sed -i 's/^# android.minapi = .*/android.minapi = 23/' buildozer.spec
+
+      - name: Build APK
+        run: buildozer -v android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HG_OS_2_APK
+          path: bin/*.apk
