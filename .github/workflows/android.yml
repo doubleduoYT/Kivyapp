@@ -12,42 +12,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Install system packages
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer
+            .buildozer
+          key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          restore-keys: |
+            buildozer-${{ runner.os }}-
+
+      - name: Install packages
         run: |
           sudo apt update
           sudo apt install -y python3-pip git zip unzip openjdk-17-jdk autoconf automake libtool pkg-config zlib1g-dev libffi-dev libssl-dev
-
-      - name: Install Buildozer
-        run: |
           python3 -m pip install --upgrade pip setuptools wheel
           python3 -m pip install cython==0.29.37 buildozer
 
-      - name: Fix buildozer.spec
+      - name: Fix spec
         run: |
           if [ ! -f buildozer.spec ]; then buildozer init; fi
-          sed -i 's/^title = .*/title = HG OS 2/' buildozer.spec
-          sed -i 's/^package.name = .*/package.name = hgos2/' buildozer.spec
-          sed -i 's/^package.domain = .*/package.domain = org.doubleduo/' buildozer.spec
-          sed -i 's/^source.include_exts = .*/source.include_exts = py,png,jpg,jpeg,webp,json,mp3,wav,ogg,ttf,otf/' buildozer.spec
           sed -i 's/^requirements = .*/requirements = python3,pygame/' buildozer.spec
-          sed -i 's/^# android.api = .*/android.api = 35/' buildozer.spec
-          sed -i 's/^# android.minapi = .*/android.minapi = 23/' buildozer.spec
-
-      - name: Accept Android SDK licenses
-        run: yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          sed -i 's/^android.api = .*/android.api = 33/' buildozer.spec
+          sed -i 's/^android.minapi = .*/android.minapi = 24/' buildozer.spec
+          sed -i 's/^# android.accept_sdk_license = .*/android.accept_sdk_license = True/' buildozer.spec || echo 'android.accept_sdk_license = True' >> buildozer.spec
 
       - name: Build APK
-        run: |
-          yes | buildozer -v android debug
+        run: buildozer -v android debug
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: HG_OS_2_APK
-          path: bin/*.apk
+          name: build-output
+          path: |
+            bin/*.apk
+            .buildozer/android/platform/build-*/dists/*/build.log
