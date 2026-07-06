@@ -21,12 +21,12 @@ jobs:
         with:
           path: |
             ~/.buildozer/android/platform/android-sdk
-            ~/.buildozer/android/platform/android-ndk-r25b
+            ~/.buildozer/android/platform/android-ndk-r28c
             ~/.buildozer/android/platform/apache-ant-1.9.4
             .buildozer/android/platform
-          key: pygame-android-v3-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          key: hgos2-pygame-android-v6-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            pygame-android-v3-${{ runner.os }}-
+            hgos2-pygame-android-v6-${{ runner.os }}-
 
       - name: Install tools
         run: |
@@ -35,7 +35,7 @@ jobs:
           python3 -m pip install --upgrade pip setuptools wheel
           python3 -m pip install cython==0.29.37 buildozer==1.6.0
 
-      - name: Fix buildozer spec for pygame
+      - name: Fix buildozer spec
         run: |
           if [ ! -f buildozer.spec ]; then buildozer init; fi
           sed -i 's/^title = .*/title = HG OS 2/' buildozer.spec
@@ -43,19 +43,13 @@ jobs:
           sed -i 's/^package.domain = .*/package.domain = org.doubleduo/' buildozer.spec
           sed -i 's/^source.include_exts = .*/source.include_exts = py,png,jpg,jpeg,webp,json,mp3,wav,ogg,ttf,otf/' buildozer.spec
           sed -i 's/^requirements = .*/requirements = hostpython3==3.11.9,python3==3.11.9,pygame==2.5.2/' buildozer.spec
-          sed -i 's/^# android.api = .*/android.api = 33/' buildozer.spec
           sed -i 's/^android.api = .*/android.api = 33/' buildozer.spec
-          sed -i 's/^# android.minapi = .*/android.minapi = 24/' buildozer.spec
+          sed -i 's/^# android.api = .*/android.api = 33/' buildozer.spec
           sed -i 's/^android.minapi = .*/android.minapi = 24/' buildozer.spec
-          sed -i 's/^# android.archs = .*/android.archs = arm64-v8a/' buildozer.spec
+          sed -i 's/^# android.minapi = .*/android.minapi = 24/' buildozer.spec
           sed -i 's/^android.archs = .*/android.archs = arm64-v8a/' buildozer.spec
-          sed -i 's/^# android.accept_sdk_license = .*/android.accept_sdk_license = True/' buildozer.spec || true
+          sed -i 's/^# android.archs = .*/android.archs = arm64-v8a/' buildozer.spec
           grep -q '^android.accept_sdk_license' buildozer.spec || echo 'android.accept_sdk_license = True' >> buildozer.spec
-
-      - name: Remove incompatible old Python build cache
-        run: |
-          rm -rf .buildozer/android/platform/build-*
-          rm -rf ~/.buildozer/android/platform/build-*
 
       - name: Build APK
         run: |
