@@ -24,9 +24,9 @@ jobs:
             ~/.buildozer/android/platform/android-ndk-r28c
             ~/.buildozer/android/platform/apache-ant-1.9.4
             .buildozer/android/platform
-          key: hgos2-pygame-android-v8-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          key: hgos2-pygame-android-v9-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            hgos2-pygame-android-v8-${{ runner.os }}-
+            hgos2-pygame-android-v9-${{ runner.os }}-
 
       - name: Install tools
         run: |
@@ -49,7 +49,7 @@ jobs:
               "package.name": "hgos2",
               "package.domain": "org.doubleduo",
               "source.include_exts": "py,png,jpg,jpeg,webp,json,mp3,wav,ogg,ttf,otf",
-              "requirements": "hostpython3==3.11.9,python3==3.11.9,pygame==2.5.2",
+              "requirements": "hostpython3==3.11.9,python3==3.11.9,pygame",
               "android.api": "33",
               "android.minapi": "24",
               "android.archs": "arm64-v8a",
