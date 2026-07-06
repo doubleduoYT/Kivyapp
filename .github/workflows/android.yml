@@ -24,9 +24,9 @@ jobs:
             ~/.buildozer/android/platform/android-ndk-r28c
             ~/.buildozer/android/platform/apache-ant-1.9.4
             .buildozer/android/platform
-          key: hgos2-pygame-android-v6-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          key: hgos2-pygame-android-v8-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            hgos2-pygame-android-v6-${{ runner.os }}-
+            hgos2-pygame-android-v8-${{ runner.os }}-
 
       - name: Install tools
         run: |
@@ -38,25 +38,66 @@ jobs:
       - name: Fix buildozer spec
         run: |
           if [ ! -f buildozer.spec ]; then buildozer init; fi
-          sed -i 's/^title = .*/title = HG OS 2/' buildozer.spec
-          sed -i 's/^package.name = .*/package.name = hgos2/' buildozer.spec
-          sed -i 's/^package.domain = .*/package.domain = org.doubleduo/' buildozer.spec
-          sed -i 's/^source.include_exts = .*/source.include_exts = py,png,jpg,jpeg,webp,json,mp3,wav,ogg,ttf,otf/' buildozer.spec
-          sed -i 's/^requirements = .*/requirements = hostpython3==3.11.9,python3==3.11.9,pygame==2.5.2/' buildozer.spec
-          sed -i 's/^android.api = .*/android.api = 33/' buildozer.spec
-          sed -i 's/^# android.api = .*/android.api = 33/' buildozer.spec
-          sed -i 's/^android.minapi = .*/android.minapi = 24/' buildozer.spec
-          sed -i 's/^# android.minapi = .*/android.minapi = 24/' buildozer.spec
-          sed -i 's/^android.archs = .*/android.archs = arm64-v8a/' buildozer.spec
-          sed -i 's/^# android.archs = .*/android.archs = arm64-v8a/' buildozer.spec
-          grep -q '^android.accept_sdk_license' buildozer.spec || echo 'android.accept_sdk_license = True' >> buildozer.spec
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("buildozer.spec")
+          lines = p.read_text().splitlines()
+
+          wanted = {
+              "title": "HG OS 2",
+              "package.name": "hgos2",
+              "package.domain": "org.doubleduo",
+              "source.include_exts": "py,png,jpg,jpeg,webp,json,mp3,wav,ogg,ttf,otf",
+              "requirements": "hostpython3==3.11.9,python3==3.11.9,pygame==2.5.2",
+              "android.api": "33",
+              "android.minapi": "24",
+              "android.archs": "arm64-v8a",
+              "android.accept_sdk_license": "True",
+              "orientation": "landscape",
+              "fullscreen": "1",
+          }
+
+          out = []
+          done = set()
+
+          for line in lines:
+              stripped = line.strip()
+              key = None
+              for k in wanted:
+                  if stripped.startswith(k + " =") or stripped.startswith("# " + k + " ="):
+                      key = k
+                      break
+
+              if key:
+                  out.append(f"{key} = {wanted[key]}")
+                  done.add(key)
+              else:
+                  out.append(line)
+
+          for k, v in wanted.items():
+              if k not in done:
+                  out.append(f"{k} = {v}")
+
+          p.write_text("\n".join(out) + "\n")
+          PY
+
+          grep -E "^(requirements|android.accept_sdk_license|android.api|android.minapi|android.archs|orientation|fullscreen)" buildozer.spec
 
       - name: Build APK
         run: |
-          buildozer -v android debug || (
-            HP=$(find .buildozer/android/platform/build-arm64-v8a -path '*hostpython3/native-build/root/usr/local/bin/python' | head -1)
+          yes | buildozer -v android debug || (
+            HP=$(find .buildozer/android/platform/build-arm64-v8a -path '*hostpython3/native-build/root/usr/local/bin/python' | head -1 || true)
+
+            if [ -z "$HP" ]; then
+              echo "hostpython was not created yet. Re-running buildozer with automatic license acceptance..."
+              yes | buildozer -v android debug
+              exit $?
+            fi
+
+            "$HP" -m ensurepip --upgrade || true
             "$HP" -m pip install cython==0.29.37 setuptools wheel
-            buildozer -v android debug
+            yes | buildozer -v android debug
           )
 
       - name: Upload APK
