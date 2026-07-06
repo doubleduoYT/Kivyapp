@@ -20,34 +20,51 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: |
-            ~/.buildozer
-            .buildozer
-          key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+            ~/.buildozer/android/platform/android-sdk
+            ~/.buildozer/android/platform/android-ndk-r25b
+            ~/.buildozer/android/platform/apache-ant-1.9.4
+            .buildozer/android/platform
+          key: pygame-android-v3-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            buildozer-${{ runner.os }}-
+            pygame-android-v3-${{ runner.os }}-
 
-      - name: Install packages
+      - name: Install tools
         run: |
           sudo apt update
           sudo apt install -y python3-pip git zip unzip openjdk-17-jdk autoconf automake libtool pkg-config zlib1g-dev libffi-dev libssl-dev
           python3 -m pip install --upgrade pip setuptools wheel
-          python3 -m pip install cython==0.29.37 buildozer
+          python3 -m pip install cython==0.29.37 buildozer==1.6.0
 
-      - name: Fix spec
+      - name: Fix buildozer spec for pygame
         run: |
           if [ ! -f buildozer.spec ]; then buildozer init; fi
-          sed -i 's/^requirements = .*/requirements = python3,pygame/' buildozer.spec
+          sed -i 's/^title = .*/title = HG OS 2/' buildozer.spec
+          sed -i 's/^package.name = .*/package.name = hgos2/' buildozer.spec
+          sed -i 's/^package.domain = .*/package.domain = org.doubleduo/' buildozer.spec
+          sed -i 's/^source.include_exts = .*/source.include_exts = py,png,jpg,jpeg,webp,json,mp3,wav,ogg,ttf,otf/' buildozer.spec
+          sed -i 's/^requirements = .*/requirements = python3==3.11.9,pygame==2.5.2/' buildozer.spec
+          sed -i 's/^# android.api = .*/android.api = 33/' buildozer.spec
           sed -i 's/^android.api = .*/android.api = 33/' buildozer.spec
+          sed -i 's/^# android.minapi = .*/android.minapi = 24/' buildozer.spec
           sed -i 's/^android.minapi = .*/android.minapi = 24/' buildozer.spec
-          sed -i 's/^# android.accept_sdk_license = .*/android.accept_sdk_license = True/' buildozer.spec || echo 'android.accept_sdk_license = True' >> buildozer.spec
+          sed -i 's/^# android.archs = .*/android.archs = arm64-v8a/' buildozer.spec
+          sed -i 's/^android.archs = .*/android.archs = arm64-v8a/' buildozer.spec
+          sed -i 's/^# android.accept_sdk_license = .*/android.accept_sdk_license = True/' buildozer.spec || true
+          grep -q '^android.accept_sdk_license' buildozer.spec || echo 'android.accept_sdk_license = True' >> buildozer.spec
+
+      - name: Remove incompatible old Python build cache
+        run: |
+          rm -rf .buildozer/android/platform/build-*
+          rm -rf ~/.buildozer/android/platform/build-*
 
       - name: Build APK
         run: buildozer -v android debug
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: build-output
+          name: HG_OS_2_APK
           path: |
             bin/*.apk
             .buildozer/android/platform/build-*/dists/*/build.log
