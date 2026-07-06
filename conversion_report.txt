@@ -1,0 +1,147 @@
+프로젝트: HG OS 2 Beta (v2.0.6)
+장면 수: 17
+오브젝트 수: 173
+
+장면 목록:
+- 7dwq: 썸네일
+- v5rz: boot
+- wfu7: start
+- p3e2: home
+- qbua: 앱스
+- cbg8: 통화
+- ymw2: 통화2
+- 3aq6: 통화3
+- n74q: 통화4
+- 13tz: 스토어
+- i0v6: 메시지
+- oyn1: low
+- z9t0: 날씨
+- p6j8: 음악
+- s0nn: 카메라
+- d30n: 화면 공유
+- fwta: 추가 설정
+
+블록 사용량 TOP:
+- number: 797 (지원)
+- text: 446 (지원)
+- calc_basic: 345 (지원)
+- get_variable: 281 (지원)
+- when_scene_start: 244 (지원)
+- boolean_basic_operator: 227 (지원)
+- set_variable: 221 (지원)
+- repeat_basic: 220 (지원)
+- coordinate_object: 174 (지원)
+- _if: 163 (지원)
+- repeat_inf: 150 (지원)
+- when_message_cast: 118 (지원)
+- move_y: 103 (지원)
+- start_scene: 103 (지원)
+- if_else: 82 (지원)
+- wait_second: 82 (지원)
+- hide: 77 (지원)
+- show: 70 (지원)
+- when_object_click: 68 (지원)
+- change_scale_size: 60 (지원)
+- text_write: 52 (지원)
+- message_cast: 47 (지원)
+- combine_something: 45 (지원)
+- get_nickname: 44 (지원)
+- get_sounds: 44 (지원)
+- add_effect_amount: 41 (지원)
+- set_scale_size: 39 (지원)
+- sound_something_with_block: 38 (지원)
+- coordinate_mouse: 34 (지원)
+- func_pb8h: 34 (지원)
+- locate: 33 (지원)
+- when_run_button_click: 23 (지원)
+- when_clone_start: 23 (지원)
+- move_x: 22 (지원)
+- change_to_some_shape: 22 (지원)
+- get_pictures: 22 (지원)
+- change_effect_amount: 21 (지원)
+- angle: 21 (지원)
+- hide_list: 20 (지원)
+- is_included_in_list: 20 (지원)
+- create_clone: 19 (지원)
+- get_canvas_input_value: 17 (지원)
+- mouse_clicked: 16 (지원)
+- mouse_click_cancled: 16 (지원)
+- move_to_angle: 16 (지원)
+- boolean_and_or: 15 (지원)
+- get_date: 15 (지원)
+- delete_clone: 13 (지원)
+- reach_something: 12 (지원)
+- text_append: 11 (지원)
+- ask_and_wait: 9 (지원)
+- wait_until_true: 9 (지원)
+- calc_rand: 8 (지원)
+- text_change_font_color: 8 (지원)
+- text_color: 8 (지원)
+- function_field_label: 8 (지원)
+- stop_object: 7 (지원)
+- boolean_not: 7 (지원)
+- add_value_to_list: 7 (지원)
+- show_list: 7 (지원)
+- value_of_index_from_list: 6 (지원)
+- locate_xy: 6 (지원)
+- function_create: 6 (지원)
+- repeat_while_true: 5 (지원)
+- rotate_relative: 5 (지원)
+- get_city_weather_data: 5 (지원)
+- check_city_weather: 5 (지원)
+- start_neighbor_scene: 4 (지원)
+- remove_all_clones: 4 (지원)
+- change_object_index: 4 (지원)
+- sound_something_wait_with_block: 4 (지원)
+- check_city_finedust: 4 (지원)
+- media_pipe_video_screen: 4 (지원)
+- is_object_clicked: 3 (지원)
+- read_text: 3 (지원)
+- choose_project_timer_action: 3 (지원)
+- locate_x: 2 (지원)
+- set_visible_answer: 2 (지원)
+- play_bgm: 2 (지원)
+- dialog_time: 2 (지원)
+- continue_repeat: 2 (지원)
+- substring: 2 (지원)
+- length_of_string: 2 (지원)
+- get_day_weather_data: 2 (지원)
+- get_korea_area_code: 2 (지원)
+- is_current_device_type: 2 (지원)
+- change_variable: 2 (지원)
+- sound_silent_all: 2 (지원)
+- char_at: 2 (지원)
+- length_of_list: 2 (지원)
+- when_object_click_canceled: 2 (지원)
+- function_field_string: 2 (지원)
+- function_create_value: 2 (지원)
+- set_visible_speech_to_text: 1 (지원)
+- set_visible_project_timer: 1 (지원)
+- stop_repeat: 1 (지원)
+- is_clicked: 1 (지원)
+- stop_run: 1 (지원)
+- speech_to_text_convert: 1 (지원)
+- speech_to_text_get_value: 1 (지원)
+- get_project_timer_value: 1 (지원)
+- locate_y: 1 (지원)
+- count_match_string: 1 (지원)
+- remove_value_from_list: 1 (지원)
+- erase_all_effects: 1 (지원)
+- True: 1 (지원)
+- move_direction: 1 (지원)
+- get_current_city_weather_data: 1 (지원)
+- stop_bgm: 1 (지원)
+- sound_something_second_with_block: 1 (지원)
+- stringParam_k7sa: 1 (지원)
+- func_v247: 1 (지원)
+- func_c4qo: 1 (지원)
+- func_mkrr: 1 (지원)
+- func_tnhz: 1 (지원)
+- stringParam_1tkv: 1 (지원)
+- restart_project: 1 (지원)
+
+부분/미지원 블록:
+- 없음(또는 런타임에서 no-op/더미값 처리)
+
+외부 기능 처리:
+- AI/음성 인식/카메라/실시간 날씨는 런타임에서 안전한 no-op 또는 더미값으로 처리.
