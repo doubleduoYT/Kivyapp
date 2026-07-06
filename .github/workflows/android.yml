@@ -39,8 +39,12 @@ jobs:
           sed -i 's/^# android.api = .*/android.api = 35/' buildozer.spec
           sed -i 's/^# android.minapi = .*/android.minapi = 23/' buildozer.spec
 
+      - name: Accept Android SDK licenses
+        run: yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
       - name: Build APK
-        run: buildozer -v android debug
+        run: |
+          yes | buildozer -v android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
